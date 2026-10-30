@@ -108,6 +108,12 @@ Anyone who forgets their password can use **Forgot your password?** on the sign-
   - All key conflicts in the manual analysis were found independently, and no figures were invented.
   - Results are in [ai-analysis-evaluation.md](../docs/ai-analysis-evaluation.md). The test estimate was deleted afterwards.
 
+- **Live site (30 Oct 2026, https://xlive-estimator.netlify.app):**
+  - a real EMDAD analysis ran in the Netlify background function: 270 s, about $0.66, 42 measurements and 16 queries imported
+  - a password reset worked with a real email sent through Zoho
+  - the keep-awake function is scheduled in Netlify; only a quiet week can prove it keeps the project active
+  - approval and quotation have not yet been run on the live site
+
 ### Not built yet
 
 - Several people editing the *same* estimate at once: the last save wins (no live merge).

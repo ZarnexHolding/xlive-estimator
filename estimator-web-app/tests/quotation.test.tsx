@@ -1,5 +1,5 @@
 import { renderToBuffer } from "@react-pdf/renderer";
-import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
+import { getDocument, OPS } from "pdfjs-dist/legacy/build/pdf.mjs";
 import { describe, expect, it } from "vitest";
 import { QuotationPdf } from "@/components/quotation/quotation-pdf";
 import { calculateEstimate } from "@/domain/costing/engine";
@@ -80,5 +80,12 @@ describe("J: quotation", () => {
     expect(text).toMatch(/exclude Value Added Tax/);
     expect(text).not.toContain("65,550");
     expect(text).not.toContain("165.00");
+  }, 30_000);
+
+  it("prints the XLive logo in the header", async () => {
+    const buffer = await renderToBuffer(<QuotationPdf doc={quote} />);
+    const pdf = await getDocument({ data: new Uint8Array(buffer) }).promise;
+    const { fnArray } = await (await pdf.getPage(1)).getOperatorList();
+    expect(fnArray).toContain(OPS.paintImageXObject);
   }, 30_000);
 });

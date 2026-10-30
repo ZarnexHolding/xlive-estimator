@@ -1,12 +1,14 @@
-import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import type { QuotationDocument } from "@/domain/quotation";
 import { formatAmount } from "@/lib/format";
+import { XLIVE_LOGO, XLIVE_LOGO_ASPECT_RATIO } from "./xlive-logo";
+
+const LOGO_WIDTH = 132;
 
 const s = StyleSheet.create({
   page: { paddingTop: 40, paddingBottom: 56, paddingHorizontal: 44, fontSize: 9.5, fontFamily: "Helvetica", color: "#111" },
   header: { flexDirection: "row", justifyContent: "space-between", borderBottomWidth: 1, borderBottomColor: "#111", paddingBottom: 12, marginBottom: 18 },
-  brand: { fontSize: 18, fontFamily: "Helvetica-Bold", letterSpacing: 4 },
-  brandSub: { fontSize: 8, letterSpacing: 2, color: "#555", marginTop: 2 },
+  logo: { width: LOGO_WIDTH, height: LOGO_WIDTH / XLIVE_LOGO_ASPECT_RATIO },
   small: { fontSize: 8, color: "#555", lineHeight: 1.4 },
   title: { fontSize: 14, fontFamily: "Helvetica-Bold", marginBottom: 8 },
   metaGrid: { flexDirection: "row", gap: 24, marginBottom: 18 },
@@ -37,10 +39,8 @@ export function QuotationPdf({ doc }: { doc: QuotationDocument }) {
     <Document title={`Quotation ${doc.number}`} author={c.companyName} subject={doc.client.projectName}>
       <Page size="A4" style={s.page}>
         <View style={s.header} fixed>
-          <View>
-            <Text style={s.brand}>XLIVE</Text>
-            <Text style={s.brandSub}>PRODUCTION</Text>
-          </View>
+          {/* eslint-disable-next-line jsx-a11y/alt-text -- react-pdf's Image takes no alt text */}
+          <Image src={XLIVE_LOGO} style={s.logo} />
           <View style={{ alignItems: "flex-end" }}>
             <Text style={{ fontFamily: "Helvetica-Bold" }}>{c.companyName}</Text>
             {c.legalName ? <Text style={s.small}>{c.legalName}</Text> : null}
