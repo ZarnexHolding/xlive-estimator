@@ -123,8 +123,12 @@ The app runs in one of two modes:
 
 ### Steps
 
-1. **Put the code in a private Git repository** (for example GitHub). The root `.gitignore` keeps `reference-docs/` (client files) and `.env*` (secrets) out of it.
-2. **Create the site.** In Netlify, go to *Add new project → Import an existing project*, choose the repository, and set **Base directory** to `estimator-web-app`. The build command (`npm run build`) and Next.js output are detected.
+1. **Put the code in a Git repository.** It is in [`ZarnexHolding/xlive-estimator`](https://github.com/ZarnexHolding/xlive-estimator).
+   - The repository is **public**, because Netlify's Free plan cannot connect a *private* repository owned by a GitHub organisation.
+   - The root `.gitignore` keeps `reference-docs/` (client files) and `.env*` (secrets) out of it.
+2. **Create the site.** In Netlify, go to *Add new project → Import an existing project*, choose the repository, and set **Base directory** to `estimator-web-app`.
+   - `netlify.toml` sets the build command, the publish directory (`.next`) and Netlify's Next.js adapter (`@netlify/plugin-nextjs`).
+   - These are declared in the file because Netlify does not detect Next.js in a subdirectory.
 3. **Add environment variables.** Under *Project configuration → Environment variables*, use the values from `.env.local`, with the **Builds, Functions and Runtime** scopes:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
@@ -132,8 +136,9 @@ The app runs in one of two modes:
    - `ANTHROPIC_API_KEY` (mark as secret)
    - optionally `ANTHROPIC_MODEL`
 4. **Configure Supabase sign-in.** Under *Auth → URL Configuration*:
-   - set *Site URL* to `https://<site>.netlify.app`
-   - add `https://<site>.netlify.app/auth/confirm` to *Redirect URLs*
+   - set *Site URL* to `https://xlive-estimator.netlify.app`
+   - add `https://xlive-estimator.netlify.app/**` to *Redirect URLs* (the sign-up link carries `?next=/onboarding`, which an exact URL may not match)
+   - also add `http://localhost:3000/**`, so sign-up still works in local development
 5. **Deploy, then check the result.** Sign in and run one analysis. In the Netlify function logs, `analysis-job` prints `[analyse] … input_tokens=… output_tokens=…`. It never logs document content.
 
 ### Free plan limits

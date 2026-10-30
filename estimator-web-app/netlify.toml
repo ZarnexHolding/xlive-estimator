@@ -1,9 +1,10 @@
 # Netlify deployment (Free plan). Set the site's base directory to estimator-web-app.
-# Next.js is detected automatically and built with Netlify's OpenNext adapter.
 # Environment variables are set in the Netlify UI, not here (see README "Deployment").
 
 [build]
   command = "npm run build"
+  # Next.js build output. The adapter below turns it into Netlify functions and edge functions.
+  publish = ".next"
 
 [build.environment]
   # Same major version as local development.
@@ -12,3 +13,9 @@
 [functions]
   # The background analysis worker imports the app's AI code from src/.
   node_bundler = "esbuild"
+
+# Netlify's Next.js adapter (OpenNext). Netlify only adds it on its own when it detects Next.js
+# at the repository root, and this app is in a subdirectory, so it is declared here and in
+# package.json devDependencies. Update it with: npm install -D @netlify/plugin-nextjs@latest
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
