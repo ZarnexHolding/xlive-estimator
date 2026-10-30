@@ -1,0 +1,9 @@
+# Client design files: confidential, never committed or deployed.
+/reference-docs/
+
+# Secrets (each app keeps .env.example as a template)
+.env*
+!.env.example
+
+# Local tool state
+.claude/

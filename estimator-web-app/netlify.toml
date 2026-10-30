@@ -1,0 +1,14 @@
+# Netlify deployment (Free plan). Set the site's base directory to estimator-web-app.
+# Next.js is detected automatically and built with Netlify's OpenNext adapter.
+# Environment variables are set in the Netlify UI, not here (see README "Deployment").
+
+[build]
+  command = "npm run build"
+
+[build.environment]
+  # Same major version as local development.
+  NODE_VERSION = "22"
+
+[functions]
+  # The background analysis worker imports the app's AI code from src/.
+  node_bundler = "esbuild"
