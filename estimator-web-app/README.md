@@ -152,6 +152,58 @@ The Free plan has 300 credits a month, with no card and no overage charges. If t
 | Page views | 2 per 10,000 requests |
 | Bandwidth | 20 per GB |
 
+### Keeping the database awake
+
+Supabase pauses a Free plan project after a week without enough database activity, which takes the app offline until someone restores it. The scheduled function `netlify/functions/keep-database-awake.mts` prevents this:
+
+- It makes one small database read every 6 hours, as an anonymous visitor, so Row Level Security returns no rows.
+- It runs on the published deploy only, and cannot be called by URL.
+- To check it, open *Logs & metrics → Functions → keep-database-awake* in Netlify. Failures are logged there. Supabase also emails a warning about a week before pausing a project.
+
+### Backups
+
+The Free plan has **no automatic backups**, and Supabase's database backups never include stored files. `npm run backup` saves both to a folder on your computer. Run it weekly, and always before a risky change.
+
+**What it saves:**
+
+| Saved | Where |
+|---|---|
+| All app data, including approved versions and quotations, plus sign-in accounts | `database/<date>/data.sql` |
+| The database schema at that date | `database/<date>/migrations/` |
+| The private PDFs, each one once, checked against its stored fingerprint | `files/<bucket>/...` |
+
+Sign-in sessions are left out, so people simply sign in again after a restore. Netlify settings, Supabase sign-in settings and the secrets in `.env.local` are not in the backup, so keep those secrets in a password manager.
+
+**One-time setup:**
+
+1. Install the PostgreSQL 17 command line tools. This command leaves out the database server:
+
+   ```bash
+   winget install -e --id PostgreSQL.PostgreSQL.17 --override "--mode unattended --unattendedmodeui none --disable-components server,pgAdmin,stackbuilder"
+   ```
+
+2. Add these to `.env.local` (see `.env.example`). **Never add them to Netlify.**
+   - `SUPABASE_DB_URL`: the **Session pooler** connection string from the **Connect** button in Supabase, with your database password in it. You can reset the password under *Project Settings → Database*. URL-encode any special characters in it.
+   - `SUPABASE_SECRET_KEY`: from *Project Settings → API Keys*.
+   - `BACKUP_DIR` (optional): the backup folder. The default is `estimator-backups`, beside the project folder.
+
+**Keep the backups private.** They contain client PDFs, your prices and hashed passwords.
+
+- The script refuses to write inside this repository, because it is public.
+- Point `BACKUP_DIR` at a private synced folder (for example Google Drive or OneDrive) so that a copy survives if this computer fails.
+
+**Restoring into a new Supabase project:**
+
+1. Create the project and run every file in the backup's `migrations` folder, in order, in the SQL editor.
+2. Load the data, using the new project's Session pooler connection string:
+
+   ```bash
+   psql --single-transaction --variable ON_ERROR_STOP=1 --command "SET session_replication_role = replica" --file data.sql --dbname "<connection string>"
+   ```
+
+3. Point `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SECRET_KEY` in `.env.local` at the new project, then run `npm run backup:restore-files` to upload the PDFs.
+4. Update the same variables on Netlify, set the sign-in addresses (step 4 above), and redeploy.
+
 ### Other notes
 
 - **Claude usage** is billed by Anthropic separately: about $0.40–0.65 per analysis at current prices.

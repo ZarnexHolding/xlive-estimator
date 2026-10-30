@@ -11,6 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "npm run typecheck && npm run lint && npm run test",
+    "backup": "node scripts/backup.mjs",
+    "backup:restore-files": "node scripts/backup.mjs --restore-files",
     "postinstall": "node scripts/copy-pdf-worker.mjs"
   },
   "dependencies": {
