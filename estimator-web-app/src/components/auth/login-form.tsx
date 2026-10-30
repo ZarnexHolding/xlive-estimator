@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LinkButton } from "@/components/ui/link-button";
+import { newPasswordProblem } from "@/lib/password";
 import { appStore } from "@/lib/store";
 import { getBrowserSupabase } from "@/lib/supabase/browser";
-import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { isSupabaseConfigured, RESET_PASSWORD_PATH } from "@/lib/supabase/config";
 import { cn } from "@/lib/utils";
 import { AuthCard } from "./auth-card";
 
@@ -17,11 +18,21 @@ function safeNext(raw: string | null): string {
   return raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : "/";
 }
 
+const CARD_TEXT = {
+  signin: { title: "Sign in", description: "Use your XLive Estimator account.", action: "Sign in" },
+  signup: {
+    title: "Create an account",
+    description: "Confirm your email, then sign in. The first person to sign in sets up the organisation; everyone else is added by an administrator.",
+    action: "Create account",
+  },
+  reset: { title: "Reset your password", description: "Enter your email and we will send you a link to choose a new password.", action: "Send reset link" },
+};
+
 export function LoginForm() {
   const params = useSearchParams();
   const router = useRouter();
   const next = safeNext(params.get("next"));
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<keyof typeof CARD_TEXT>("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -53,8 +64,18 @@ export function LoginForm() {
       router.replace(next);
       return;
     }
-    if (password.length < 10) {
-      setMessage({ tone: "error", text: "Use a password of at least 10 characters." });
+    if (mode === "reset") {
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo: `${window.location.origin}/auth/confirm?next=${RESET_PASSWORD_PATH}` });
+      setBusy(false);
+      if (error) return setMessage({ tone: "error", text: error.message });
+      // The same answer whether or not the account exists, so this form cannot reveal who has one.
+      setMessage({ tone: "info", text: `If ${email.trim()} has an account, a reset link is on its way.` });
+      setMode("signin");
+      return;
+    }
+    const problem = newPasswordProblem(password);
+    if (problem) {
+      setMessage({ tone: "error", text: problem });
       setBusy(false);
       return;
     }
@@ -73,46 +94,56 @@ export function LoginForm() {
     setMode("signin");
   };
 
+  const switchTo = (target: keyof typeof CARD_TEXT) => {
+    setMode(target);
+    setMessage(null);
+  };
+  const footerLink = "font-medium text-foreground underline-offset-4 hover:underline";
+
   return (
-    <AuthCard
-      title={mode === "signin" ? "Sign in" : "Create an account"}
-      description={
-        mode === "signin"
-          ? "Use your XLive Estimator account."
-          : "Confirm your email, then sign in. The first person to sign in sets up the organisation; everyone else is added by an administrator."
-      }
-    >
+    <AuthCard title={CARD_TEXT[mode].title} description={CARD_TEXT[mode].description}>
       <form onSubmit={submit} className="space-y-3">
         <div className="space-y-1.5">
           <Label htmlFor="email">Email</Label>
           <Input id="email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            autoComplete={mode === "signin" ? "current-password" : "new-password"}
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+        {mode !== "reset" && (
+          <div className="space-y-1.5">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              autoComplete={mode === "signin" ? "current-password" : "new-password"}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+        )}
         {message && (
           <p role={message.tone === "error" ? "alert" : "status"} className={cn("text-sm", message.tone === "error" ? "text-red-700" : "text-emerald-700")}>
             {message.text}
           </p>
         )}
         <Button type="submit" className="w-full" disabled={busy}>
-          {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
+          {busy ? "Please wait…" : CARD_TEXT[mode].action}
         </Button>
       </form>
-      <p className="text-center text-sm text-muted-foreground">
-        {mode === "signin" ? "New to XLive Estimator?" : "Already have an account?"}{" "}
-        <button type="button" className="font-medium text-foreground underline-offset-4 hover:underline" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setMessage(null); }}>
-          {mode === "signin" ? "Create an account" : "Sign in"}
-        </button>
-      </p>
+      <div className="space-y-1 text-center text-sm text-muted-foreground">
+        <p>
+          {mode === "signin" ? "New to XLive Estimator?" : mode === "signup" ? "Already have an account?" : "Remembered it?"}{" "}
+          <button type="button" className={footerLink} onClick={() => switchTo(mode === "signin" ? "signup" : "signin")}>
+            {mode === "signin" ? "Create an account" : "Sign in"}
+          </button>
+        </p>
+        {mode === "signin" && (
+          <p>
+            <button type="button" className={footerLink} onClick={() => switchTo("reset")}>
+              Forgot your password?
+            </button>
+          </p>
+        )}
+      </div>
     </AuthCard>
   );
 }

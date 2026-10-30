@@ -15,3 +15,6 @@ export function documentPath(organisationId: string, estimateId: string, documen
 
 /** Routes reachable without signing in. */
 export const PUBLIC_PATHS = ["/login", "/auth"];
+
+/** Where an emailed password reset link ends up, after /auth/confirm has signed the person in. */
+export const RESET_PASSWORD_PATH = "/reset-password";

@@ -37,6 +37,8 @@ The app runs in one of two modes:
 3. Colleagues create accounts the same way. The administrator then adds each one under **Settings → Team members** as estimator, viewer or admin. An account that has not been added gets no access, and no one else can create a second organisation.
 4. As administrator, check **Settings** (quotation terms are placeholders), then **Price catalogue → Import provisional XLive reference rates** if wanted.
 
+Anyone who forgets their password can use **Forgot your password?** on the sign-in page.
+
 ## Scripts
 
 | Command | Purpose |
@@ -111,7 +113,6 @@ The app runs in one of two modes:
 - Several people editing the *same* estimate at once: the last save wins (no live merge).
 - Customer quotation formats other than "scope + total".
 - Editable costing rules.
-- Password reset.
 
 ## Deployment (Netlify Free plan)
 
@@ -139,7 +140,22 @@ The app runs in one of two modes:
    - set *Site URL* to `https://xlive-estimator.netlify.app`
    - add `https://xlive-estimator.netlify.app/**` to *Redirect URLs* (the sign-up link carries `?next=/onboarding`, which an exact URL may not match)
    - also add `http://localhost:3000/**`, so sign-up still works in local development
-5. **Deploy, then check the result.** Sign in and run one analysis. In the Netlify function logs, `analysis-job` prints `[analyse] … input_tokens=… output_tokens=…`. It never logs document content.
+5. **Set up email.** Supabase's built-in sender only reaches your Supabase project team, at 2 emails an hour, so colleagues would never get their sign-up link. Under *Authentication → Emails → SMTP Settings*, turn on custom SMTP:
+
+   | Field | Value |
+   |---|---|
+   | Sender email / name | `estimator@xlive-pro.com` / `XLive Estimator` (an alias of the mailbox below) |
+   | Host / port | `smtppro.zoho.sa` / `587` (`smtp.zoho.sa` on a free Zoho plan) |
+   | Username | `connect@xlive-pro.com` (the mailbox, not the alias) |
+   | Password | A Zoho application-specific password just for this app |
+
+   Then, in the *Reset password* email template, change the link so it works in any browser. Supabase's default link only works in the browser that asked for it:
+
+   ```text
+   {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/reset-password
+   ```
+
+6. **Deploy, then check the result.** Sign in and run one analysis. In the Netlify function logs, `analysis-job` prints `[analyse] … input_tokens=… output_tokens=…`. It never logs document content.
 
 ### Free plan limits
 
