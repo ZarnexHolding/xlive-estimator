@@ -58,7 +58,7 @@ export function ApprovalStep({ estimate, calc, update, goTo }: StepProps) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              {blocking.length === 0 ? <CheckCircle2 className="size-5 text-emerald-600" /> : <ShieldAlert className="size-5 text-red-600" />}
+              {blocking.length === 0 ? <CheckCircle2 className="size-5 text-success" /> : <ShieldAlert className="size-5 text-destructive" />}
               {blocking.length === 0 ? "No blocking issues" : `${blocking.length} blocking issue(s)`}
             </CardTitle>
             <CardDescription>The estimate cannot be approved or quoted while blocking issues remain.</CardDescription>
@@ -106,7 +106,7 @@ export function ApprovalStep({ estimate, calc, update, goTo }: StepProps) {
               </ul>
             )}
             {nonDimensioned.length > 0 && (
-              <p className="mt-3 text-xs text-amber-800">
+              <p className="mt-3 text-xs text-warning">
                 {nonDimensioned.length} quantity(ies) rely on {[...new Set(nonDimensioned.map((m) => BASIS_LABELS[m.basis].toLowerCase()))].join(" / ")} rather than printed dimensions.
               </p>
             )}
@@ -221,8 +221,8 @@ export function ApprovalStep({ estimate, calc, update, goTo }: StepProps) {
                         {new Date(v.approvedAt).toLocaleString("en-GB")} by {v.approvedBy} · {v.costing.lineItems.length} lines · {MODE_LABEL[v.costing.pricing.mode]}
                       </p>
                       {v.approvalNote && <p className="mt-1 text-xs">{v.approvalNote}</p>}
-                      {v.acknowledgedWarnings.length > 0 && <p className="mt-1 text-xs text-amber-800">{v.acknowledgedWarnings.length} warning(s) acknowledged</p>}
-                      <p className={`mt-1 text-xs ${integrity.ok ? "text-emerald-700" : "text-red-700"}`}>
+                      {v.acknowledgedWarnings.length > 0 && <p className="mt-1 text-xs text-warning">{v.acknowledgedWarnings.length} warning(s) acknowledged</p>}
+                      <p className={`mt-1 text-xs ${integrity.ok ? "text-success" : "text-destructive"}`}>
                         {integrity.ok ? "Snapshot verified: recalculation matches stored totals" : "Integrity check failed: stored totals do not match recalculation"}
                       </p>
                     </li>

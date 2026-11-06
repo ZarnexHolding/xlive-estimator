@@ -132,7 +132,7 @@ export function LineItemsTable({
                   ) : linked ? (
                     <button type="button" className="w-full text-right" onClick={() => onOpen(line.id)} title={`Linked to measurement: ${linked.componentName}`}>
                       <span className="flex items-center justify-end gap-1 pt-1 font-mono text-sm tabular-nums">
-                        <Link2 className="size-3 text-sky-600" aria-hidden />
+                        <Link2 className="size-3 text-info" aria-hidden />
                         {linked.quantity === null ? "—" : formatAmount(linked.quantity, Math.min(4, linked.quantity.split(".")[1]?.length ?? 0))}
                       </span>
                       <span className="block truncate text-[10px] text-muted-foreground">{linked.componentName}</span>
@@ -173,7 +173,7 @@ export function LineItemsTable({
                       {line.method === "quantity_x_rate" && result.quantity && <p className="text-[10px] text-muted-foreground">{formatQuantity(result.quantity, result.quantityUnit)}</p>}
                     </>
                   ) : (
-                    <p className="pt-1 text-xs font-medium text-red-700">{line.rate === null ? "Price not configured" : "Not calculated"}</p>
+                    <p className="pt-1 text-xs font-medium text-destructive">{line.rate === null ? "Price not configured" : "Not calculated"}</p>
                   )}
                 </td>
                 <td className="px-1 py-1.5">

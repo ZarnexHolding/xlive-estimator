@@ -69,12 +69,12 @@ export function EstimatesTable({ rows, compact = false }: { rows: EstimateRow[];
               </TableCell>
               <TableCell className="text-right font-mono text-sm tabular-nums">
                 {e.costing.currency} {formatAmount(calc.directCost)}
-                {calc.uncalculatedLineCount > 0 && <div className="text-[11px] text-red-700">{calc.uncalculatedLineCount} line(s) unpriced</div>}
+                {calc.uncalculatedLineCount > 0 && <div className="text-[11px] text-destructive">{calc.uncalculatedLineCount} line(s) unpriced</div>}
               </TableCell>
               <TableCell className="text-right font-mono text-sm tabular-nums">
                 {calc.uncalculatedLineCount > 0 ? (
                   <>
-                    <span className="font-sans text-xs font-medium text-red-700">Incomplete</span>
+                    <span className="font-sans text-xs font-medium text-destructive">Incomplete</span>
                     {calc.sellingPriceExVat && calc.sellingPriceExVat !== "0.00" && <div className="text-[11px] text-muted-foreground">partial {formatAmount(calc.sellingPriceExVat)}</div>}
                   </>
                 ) : calc.sellingPriceExVat ? (

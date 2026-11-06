@@ -212,11 +212,11 @@ export function CataloguePage() {
                           <p className="font-medium">{c.name}</p>
                           <p className="text-xs text-muted-foreground">{c.category}</p>
                           {c.specs.thicknessMm && <p className="text-xs text-muted-foreground">{c.specs.thicknessMm} mm{c.specs.sheetLengthMm && c.specs.sheetWidthMm ? ` · sheet ${c.specs.sheetLengthMm} × ${c.specs.sheetWidthMm} mm` : ""}</p>}
-                          {c.notes && <p className="mt-0.5 text-xs text-amber-800">{c.notes}</p>}
+                          {c.notes && <p className="mt-0.5 text-xs text-warning">{c.notes}</p>}
                         </TableCell>
                         <TableCell className="text-sm">{UNIT_LABELS[c.unit].long}</TableCell>
                         <TableCell className="text-sm">{COST_TYPE_LABELS[c.costType]}</TableCell>
-                        <TableCell className="text-right font-mono tabular-nums">{rate ? `${rate.currency} ${formatAmount(rate.rate)}` : <span className="text-xs font-sans text-red-700">Price not configured</span>}</TableCell>
+                        <TableCell className="text-right font-mono tabular-nums">{rate ? `${rate.currency} ${formatAmount(rate.rate)}` : <span className="text-xs font-sans text-destructive">Price not configured</span>}</TableCell>
                         <TableCell>{rate && <Pill tone={rate.verification === "verified" ? "success" : "warning"}>{rate.verification}</Pill>}</TableCell>
                         <TableCell className="text-sm text-muted-foreground">{rate?.effectiveFrom ?? "—"}</TableCell>
                         <TableCell className="text-sm text-muted-foreground">{c.supplier || "—"}</TableCell>

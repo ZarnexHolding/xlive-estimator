@@ -75,7 +75,7 @@ function AllowanceRow({ label, allowance, amount, onChange }: { label: string; a
           </div>
         )}
       </div>
-      {allowance.mode === "not_set" && <p className="text-[11px] text-amber-700">No company policy configured: choose an allowance or &quot;None&quot;.</p>}
+      {allowance.mode === "not_set" && <p className="text-[11px] text-warning">No company policy configured: choose an allowance or &quot;None&quot;.</p>}
     </div>
   );
 }
@@ -107,7 +107,7 @@ export function PricingPanel({ costing, calc, onChange }: { costing: CostingInpu
             <dt>Direct cost</dt>
             <dd className="font-mono tabular-nums">{formatMoney(calc.directCost, currency)}</dd>
           </div>
-          {calc.uncalculatedLineCount > 0 && <p className="text-xs text-red-700">{calc.uncalculatedLineCount} included line(s) have no amount and are not in this total.</p>}
+          {calc.uncalculatedLineCount > 0 && <p className="text-xs text-destructive">{calc.uncalculatedLineCount} included line(s) have no amount and are not in this total.</p>}
         </dl>
         <AllowanceRow label="Overhead" allowance={costing.overhead} amount={calc.overhead.amount} onChange={(overhead) => onChange({ ...costing, overhead })} />
         <AllowanceRow label="Contingency" allowance={costing.contingency} amount={calc.contingency.amount} onChange={(contingency) => onChange({ ...costing, contingency })} />

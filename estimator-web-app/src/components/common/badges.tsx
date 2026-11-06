@@ -84,8 +84,8 @@ export function OriginBadge({ origin }: { origin: Measurement["origin"] }) {
 
 export function IssueIcon({ severity }: { severity: "blocking" | "warning" }) {
   return severity === "blocking" ? (
-    <OctagonAlert className="size-4 shrink-0 text-red-600" aria-label="Blocking" />
+    <OctagonAlert className="size-4 shrink-0 text-destructive" aria-label="Blocking" />
   ) : (
-    <AlertTriangle className="size-4 shrink-0 text-amber-600" aria-label="Warning" />
+    <AlertTriangle className="size-4 shrink-0 text-warning" aria-label="Warning" />
   );
 }

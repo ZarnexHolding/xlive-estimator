@@ -121,7 +121,7 @@ export function LoginForm() {
           </div>
         )}
         {message && (
-          <p role={message.tone === "error" ? "alert" : "status"} className={cn("text-sm", message.tone === "error" ? "text-red-700" : "text-emerald-700")}>
+          <p role={message.tone === "error" ? "alert" : "status"} className={cn("text-sm", message.tone === "error" ? "text-destructive" : "text-success")}>
             {message.text}
           </p>
         )}

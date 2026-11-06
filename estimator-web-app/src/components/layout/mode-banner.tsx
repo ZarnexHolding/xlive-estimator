@@ -7,6 +7,7 @@ import { appStore } from "@/lib/store";
 import { useStore, useSystemStatus } from "@/lib/store/hooks";
 import { getBrowserSupabase } from "@/lib/supabase/browser";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./theme-toggle";
 
 /** Always-visible statement of where data lives, who is signed in, and whether AI is really available. */
 export function ModeBanner() {
@@ -53,12 +54,15 @@ export function ModeBanner() {
           <Sparkles className="size-3.5" aria-hidden />
           {ai}
         </span>
-        {loadErrors.length > 0 && <span className="font-medium text-red-700">{loadErrors.join(" ")}</span>}
-        {connected && context && (
-          <Button variant="ghost" size="xs" className="ml-auto" onClick={signOut}>
-            <LogOut /> Sign out
-          </Button>
-        )}
+        {loadErrors.length > 0 && <span className="font-medium text-destructive">{loadErrors.join(" ")}</span>}
+        <span className="ml-auto flex items-center gap-1">
+          <ThemeToggle />
+          {connected && context && (
+            <Button variant="ghost" size="xs" onClick={signOut}>
+              <LogOut /> Sign out
+            </Button>
+          )}
+        </span>
       </div>
     </div>
   );

@@ -278,7 +278,7 @@ export function DocumentsStep({ estimate, update, goTo }: StepProps) {
                           {lastRun.provider === "anthropic" ? `AI (${lastRun.model ?? "unknown model"})` : "Reference analysis, not AI"}
                           {lastRun.completedAt && ` · ${formatDate(lastRun.completedAt)}`}
                           {lastRun.status === "awaiting_review" && ` · ${lastRun.measurementCount} measurements`}
-                          {lastRun.error && <p className="mt-1 text-red-700">{lastRun.error}</p>}
+                          {lastRun.error && <p className="mt-1 text-destructive">{lastRun.error}</p>}
                           {lastRun.summary && <p className="mt-1 text-muted-foreground">{lastRun.summary}</p>}
                           {lastRun.projectTypeSuggestion && lastRun.projectTypeSuggestion !== estimate.project.projectType && (
                             <p className="mt-1">

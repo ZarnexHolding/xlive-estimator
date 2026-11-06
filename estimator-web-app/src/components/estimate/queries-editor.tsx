@@ -36,7 +36,7 @@ export function QueriesEditor({ queries, onChange, emptyText = "No open question
         {queries.map((q) => (
           <li key={q.id} className="rounded-md border p-2.5 text-sm">
             <div className="flex items-start gap-2">
-              {q.status === "open" ? <CircleHelp className="mt-0.5 size-4 shrink-0 text-red-600" aria-label="Open" /> : <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" aria-label="Resolved" />}
+              {q.status === "open" ? <CircleHelp className="mt-0.5 size-4 shrink-0 text-destructive" aria-label="Open" /> : <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" aria-label="Resolved" />}
               <div className="min-w-0 flex-1">
                 <p>{q.text}</p>
                 {q.status === "resolved" ? (

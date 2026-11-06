@@ -84,7 +84,7 @@ export function CostingStep({ estimate, calc, update, goTo }: StepProps) {
               );
             })}
           </NativeSelect>
-          <a href="#pricing" className="ml-auto text-sm text-sky-700 hover:underline 2xl:hidden">
+          <a href="#pricing" className="ml-auto text-sm text-info hover:underline 2xl:hidden">
             Pricing &amp; allowances ↓
           </a>
         </div>

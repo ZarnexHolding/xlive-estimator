@@ -115,7 +115,7 @@ export function EstimateWorkspace({ id }: { id: string }) {
             <dd className="font-mono font-medium tabular-nums">{formatMoney(calc.directCost, currency)}</dd>
             <dd className="font-mono font-medium tabular-nums">{formatMoney(calc.sellingPriceExVat, currency)}</dd>
             {calc.uncalculatedLineCount > 0 && (
-              <dd className="col-span-2 text-xs text-red-700">{calc.uncalculatedLineCount} line(s) not calculated and excluded from these totals</dd>
+              <dd className="col-span-2 text-xs text-destructive">{calc.uncalculatedLineCount} line(s) not calculated and excluded from these totals</dd>
             )}
           </dl>
         </div>

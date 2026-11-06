@@ -197,12 +197,12 @@ export function ReviewStep({ estimate, update, goTo }: StepProps) {
                         {m.notes && <p className="mt-1 line-clamp-2 text-xs text-muted-foreground" title={m.notes}>{m.notes}</p>}
                       </TableCell>
                       <TableCell className="whitespace-normal">
-                        <p className="font-mono text-sm font-medium tabular-nums">{m.quantity === null ? <span className="text-red-700">Unresolved</span> : formatQuantity(m.quantity, m.unit)}</p>
+                        <p className="font-mono text-sm font-medium tabular-nums">{m.quantity === null ? <span className="text-destructive">Unresolved</span> : formatQuantity(m.quantity, m.unit)}</p>
                         {formula && <p className="font-mono text-[11px] text-muted-foreground">{formula}</p>}
                       </TableCell>
                       <TableCell className="whitespace-normal text-xs">
                         {m.sourcePage ? (
-                          <button type="button" className="font-medium text-sky-700 hover:underline" onClick={(e) => { e.stopPropagation(); jumpTo(m); }}>
+                          <button type="button" className="font-medium text-info hover:underline" onClick={(e) => { e.stopPropagation(); jumpTo(m); }}>
                             Page {m.sourcePage}
                           </button>
                         ) : (

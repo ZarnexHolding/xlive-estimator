@@ -142,7 +142,7 @@ export function LineEditorSheet({
             <h3 className="text-sm font-semibold">Rate source</h3>
             <p className="text-sm">
               {line.rate === null ? (
-                <span className="font-medium text-red-700">Price not configured</span>
+                <span className="font-medium text-destructive">Price not configured</span>
               ) : (
                 <>
                   <span className="font-mono">
@@ -172,7 +172,7 @@ export function LineEditorSheet({
                         <span className="min-w-0">
                           <span className="font-medium">{item.name}</span> · {rate.currency} {formatAmount(rate.rate)} {item.unit === "lump_sum" ? "lump sum" : `/ ${UNIT_LABELS[item.unit].short}`}{" "}
                           <Pill tone={rate.verification === "verified" ? "success" : "warning"} className="h-4 text-[10px]">{rate.verification}</Pill>
-                          {!unitMatches && <span className="ml-1 text-red-700">unit differs</span>}
+                          {!unitMatches && <span className="ml-1 text-destructive">unit differs</span>}
                         </span>
                         <Button size="xs" variant="outline" onClick={() => applyCatalogue(item)}>
                           Use

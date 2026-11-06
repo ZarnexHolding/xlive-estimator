@@ -146,7 +146,7 @@ export function PdfViewer({ file, page, onPageChange }: { file: Blob; page: numb
       </div>
       <div ref={containerRef} className="relative min-h-0 flex-1 overflow-auto bg-neutral-200 dark:bg-neutral-900">
         {error ? (
-          <p className="p-6 text-sm text-red-700">{error}</p>
+          <p className="p-6 text-sm text-destructive">{error}</p>
         ) : (
           <>
             {busy && <p className="absolute top-2 left-2 rounded bg-background/90 px-2 py-1 text-xs text-muted-foreground">Rendering…</p>}

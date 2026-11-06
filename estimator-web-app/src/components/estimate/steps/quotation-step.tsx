@@ -97,7 +97,7 @@ export function QuotationStep({ estimate, calc, goTo }: StepProps) {
           </CardHeader>
           <CardContent>
             {preview.error ? (
-              <p className="text-sm text-red-700">{preview.error}</p>
+              <p className="text-sm text-destructive">{preview.error}</p>
             ) : (
               preview.doc && (
                 <div className="space-y-4 text-sm">
@@ -166,12 +166,12 @@ export function QuotationStep({ estimate, calc, goTo }: StepProps) {
               </NativeSelect>
             </div>
             {internalNames.length > 0 && (
-              <p className="text-xs text-amber-800">
+              <p className="text-xs text-warning">
                 {internalNames.length} item(s) have no customer-facing description and will print their internal name: {internalNames.join(", ")}. Set one on the Costing step and approve a new version.
               </p>
             )}
             {settings.terms.some((t) => t.includes("[Placeholder")) && (
-              <p className="text-xs text-amber-800">Quotation terms still contain placeholders. Review them in Settings before sending to a client.</p>
+              <p className="text-xs text-warning">Quotation terms still contain placeholders. Review them in Settings before sending to a client.</p>
             )}
             <Button className="w-full" onClick={generate} disabled={busy || !preview.doc || !canEdit}>
               {busy ? <Loader2 className="animate-spin" /> : <FileDown />} Generate quotation PDF

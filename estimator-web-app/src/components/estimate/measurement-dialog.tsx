@@ -249,7 +249,7 @@ export function MeasurementDialog({
           <div className="space-y-1.5 sm:col-span-2">
             <Label htmlFor="m-reason">{measurement ? "Reason for change *" : "Note on source (optional)"}</Label>
             <Input id="m-reason" value={reason} onChange={(e) => setReason(e.target.value)} placeholder={measurement ? "e.g. Corrected to match elevation on p15" : "e.g. Measured on site"} />
-            {measurement?.reviewStatus === "approved" && <p className="text-xs text-amber-700">Changing an approved measurement returns it to review.</p>}
+            {measurement?.reviewStatus === "approved" && <p className="text-xs text-warning">Changing an approved measurement returns it to review.</p>}
           </div>
         </div>
         <DialogFooter>
